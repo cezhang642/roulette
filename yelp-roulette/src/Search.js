@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from 'axios';
 import './Search.css';
 class Search extends Component {
     state = {
@@ -11,17 +12,29 @@ class Search extends Component {
     handleSearch = () => {
         this.makeApiCall(this.state.searchValue);
     }
-    makeApiCall = searchInput => {
-        var searchUrl = `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchInput}`;
-        fetch(searchUrl)
-        .then(response => {
-        return response.json();
+    makeApiCall = async searchInput => {
+        const BEARER_TOKEN = '2oXsdHbjPVgyM7xmdOXjt3gBquPiu9ZqWG6ww-gAd5SGKUrJ4gscvvO4yy5tKF9PMtOrw0g6XIQKb8t9IftBw-VMEWxNPReLG0P6jVAsSN8xbre5W13g3tic5Kr8X3Yx';
+        const data = await axios.get(
+          `${'https://cors-anywhere.herokuapp.com/'}https://api.yelp.com/v3/businesses/search?location=usa`,
+          {
+            headers: {
+              Authorization: `Bearer ${BEARER_TOKEN}`,
+            },
+            params: {
+              term: searchInput,
+            },
+          },
+        )
+      
+        .then(json => {
+            console.log(json.data.businesses)
+            this.setState({ items: json.data.businesses });
         })
-        .then(jsonData => {
-        console.log(jsonData.meals);
-        this.setState({ meals: jsonData.meals });
+        .catch(err => {
+            console.log(err);
         });
     };
+
     render() {
         return (
             <div>
@@ -34,12 +47,12 @@ class Search extends Component {
             value={this.state.searchValue}
             />
             <button onClick={this.handleSearch}>Roll!</button>
-            {this.state.meals ? (
+            {this.state.items ? (
             <div>
-            {this.state.meals.map((meal, index) => (
+            {this.state.items.map((businesses, index) => (
             <div key={index}>
-            <h1>{meal.strMeal}</h1>
-            <img src={meal.strMealThumb} alt="meal-thumbnail" />
+            <h1>{businesses.name}</h1>
+            <img src={businesses.image_url} alt="meal-thumbnail" />
             </div>
             ))}
             </div>
