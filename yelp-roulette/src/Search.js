@@ -35,6 +35,8 @@ class Search extends Component {
         });
     };
 
+    
+
     render() {
         return (
             <div>
@@ -48,14 +50,7 @@ class Search extends Component {
             />
             <button onClick={this.handleSearch}>Roll!</button>
             {this.state.items ? (
-            <div>
-            {this.state.items.map((businesses, index) => (
-            <div key={index}>
-            <h1>{businesses.name}</h1>
-            <img src={businesses.image_url} alt="meal-thumbnail" />
-            </div>
-            ))}
-            </div>
+
             ) : (
             <p>Try searching for a meal</p>
             )}
