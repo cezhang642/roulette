@@ -4,7 +4,8 @@ import './Search.css';
 class Search extends Component {
     state = {
         searchValue: '',
-        meals: []
+        items : [],
+        curr : []
     };
     handleOnChange = event => {
         this.setState({ searchValue: event.target.value });
@@ -25,10 +26,12 @@ class Search extends Component {
             },
           },
         )
-      
+
         .then(json => {
-            console.log(json.data.businesses)
             this.setState({ items: json.data.businesses });
+        })
+        .then(resty => {
+          this.setState({ curr: this.state.items[Math.floor(Math.random() * this.state.items.length)]})
         })
         .catch(err => {
             console.log(err);
@@ -36,6 +39,7 @@ class Search extends Component {
     };
 
     render() {
+      const k = Math.floor(Math.random() *(this.state.items).length)
         return (
             <div>
             <h1>Welcome to the Restaurant Roulette</h1>
@@ -47,8 +51,18 @@ class Search extends Component {
             value={this.state.searchValue}
             />
             <button onClick={this.handleSearch}>Roll!</button>
+            {console.log(this.state.curr)}
             {this.state.items ? (
+            //   <div>
+            //   {
+            //   <h1>{((this.state.items)[k]).name}</h1>
+            //   // <img src={this.state.items[k].image_url} alt="meal-thumbnail" />
+            //   // </div>
+            //   // ))}
+            // }
+            //   </div>
             <div>
+              <h1>{this.state.curr.name}</h1>
             {this.state.items.map((businesses, index) => (
             <div key={index}>
             <h1>{businesses.name}</h1>
